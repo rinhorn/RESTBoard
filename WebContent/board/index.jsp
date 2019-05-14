@@ -130,16 +130,14 @@ function del(){
 	if(!confirm("삭제하실래요?")){
 		return;
 	}
+	var board_id=$($("form[name='detail-form']").find("input[name='board_id']")).val();
 	$.ajax({
-		url:"/rest/boards",
-		type:"get",
-		data:{
-			member_id:$($("form[name='detail-form']").find("input[name='board_id']")).val()
-		},
+		url:"/rest/boards/"+board_id,
+		type:"DELETE",
 		success:function(result){
 			var json=JSON.parse(result);
-			if(json.result==1){
-				//alert("삭제완료");
+			if(json.resultCode==1){
+				alert("삭제완료");
 				getList();
 				//상세보기 초기화 (채워져 있지 않게)
 				$("form[name='detail-form']").trigger("reset");
@@ -151,18 +149,23 @@ function del(){
 }
 
 function edit(){
+	if(!confirm("수정하실래요?")){
+		return;
+	}
 	$.ajax({
 		url:"/rest/boards",
-		type:"post",
+		type:"POST",
 		data:{
-			member_id:$($("form[name='detail-form']").find("input[name='board_id']")).val(),
-			id:$($("form[name='detail-form']").find("input[name='writer']")).val(),
-			pass:$($("form[name='detail-form']").find("input[name='title']")).val(),
-			name:$($("form[name='detail-form']").find("input[name='content']")).val()
+			_method:"PUT",
+			board_id:$($("form[name='detail-form']").find("input[name='board_id']")).val(),
+			writer:$($("form[name='detail-form']").find("input[name='writer']")).val(),
+			title:$($("form[name='detail-form']").find("input[name='title']")).val(),
+			content:$($("form[name='detail-form']").find("input[name='content']")).val()
 		},
 		success:function(result){
 			var json=JSON.parse(result);
-			if(json.result==1){
+			if(json.resultCode==1){
+				alert("수정성공")
 				getList();
 			}else{
 				alert("수정실패")

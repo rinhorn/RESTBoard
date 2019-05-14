@@ -27,6 +27,17 @@
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
 	
+	<!-- PUT / DELETE 메서드사용을 위한 설정 -->
+	<filter>
+		<filter-name>httpMethodFilter</filter-name>
+		<filter-class>org.springframework.web.filter.HiddenHttpMethodFilter</filter-class>
+	</filter>
+	
+	<filter-mapping>
+		<filter-name>httpMethodFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	
 	<!-- 일반 요청 -->
 	<servlet>
 		<servlet-name>dispatcher</servlet-name>
@@ -52,9 +63,20 @@
 		</init-param>
 	</servlet>
 
+	<!-- url-pattern의 경로중에 만일 디렉토리 경로가 포함되어있을 경우 이 디렉토리경로를 가리켜 서블릿 경로라 한다. 
+	주의) Controller 매핑시 이 서블릿 경로를 제외시켜야 한다.
+
+	유저가 브라우저에 입력한 경로가 /rest/board/list 일 경우
+	ex) @RequestMapping("/board/list") 
+	
+	만일 개발자가 서블릿 경로를 제외하고 매핑하는 방식이 헷갈릴 경우? 
+	풀경로를 사용하겠다는 설정을 하면 된다. 
+	1)DefaultAnnotationHandlerMapper 매핑 빈에 property값으로 alwaysFullPath=true 로 설정하면 된다.(기본이 false)
+	2)AnnotationMethodHandleㅋrAdapter도 같은 설정을 하면 된다.
+	-->
 	<servlet-mapping>
 		<servlet-name>restServlet</servlet-name>
-		<url-pattern>/rest</url-pattern>
+		<url-pattern>/rest/*</url-pattern>
 	</servlet-mapping>
 	
 </web-app>

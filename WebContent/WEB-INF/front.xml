@@ -3,8 +3,12 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:p="http://www.springframework.org/schema/p"
 	xmlns:context="http://www.springframework.org/schema/context"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd">
 
 
 	<!-- 웹 브라우저 기반의 요청 처리 -->
@@ -17,4 +21,26 @@
 		<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
 	</context:component-scan>
 	
+	<!-- mvc 관련한 어노테이션 지원을 위한 네임스페이스(빈) 등록 -->
+	<mvc:annotation-driven/>
+	<mvc:default-servlet-handler/>
+	
+	<!-- AOP를 이용한 관리자 세션 체크 -->
+	
+	<!-- 공통관심 사항으로서 Aspect가 될 빈 등록 -->
+<!-- 
+	<bean id="XMLAdminSessionAspect" class="com.itbank.aop.XMLAdminSessionAspect"/>
+	<aop:config>
+		<aop:aspect id="adminAuthAspect" ref="XMLAdminSessionAspect">
+			<aop:pointcut expression="execution(public * com.itbank.controller..*(..))" id="adminAuthPointCut"/>
+			<aop:around method="loginCheck" pointcut-ref="adminAuthPointCut"/>
+		</aop:aspect>
+	</aop:config>
+ -->
+ 
+
+ 	<!-- Annotation 기반 Aspect 빈 등록 -->
+ 	<aop:aspectj-autoproxy/>
+ 	<bean id="annotationAdminSessionAspect" class="com.itbank.aop.AnnotationAdminSessionAspect"/>
+ 	
 </beans>
